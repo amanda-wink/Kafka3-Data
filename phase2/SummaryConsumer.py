@@ -16,7 +16,7 @@ class Summary:
         self.wth = []
 
     def __repr__(self):
-        return [self.mean_dep, self.mean_wth, self.stdev_dep, self.stdev_wth]
+        return [self.mean_dep, self.stdev_dep, self.mean_wth, self.stdev_wth]
 
     def calculate(self):
         for message in self.consumer:
@@ -33,8 +33,6 @@ class Summary:
                 self.mean_wth = round(mean(self.wth), 2)
                 self.stdev_wth = round(stdev(self.wth), 4)
             print([self.mean_dep, self.stdev_dep, self.mean_wth, self.stdev_wth])
-
-
 
 
 if __name__ == "__main__":
