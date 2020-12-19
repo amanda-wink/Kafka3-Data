@@ -28,7 +28,6 @@ class Producer:
                 part = 0
             else:
                 part = 1
-            print(part)
             self.producer.send('bank-customer-events2', value=data, partition=part)
             sleep(1)
 
