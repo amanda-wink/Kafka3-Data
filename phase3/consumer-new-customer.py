@@ -19,18 +19,31 @@ class XactionConsumer:
         ## These are two python dictionaries
         # Ledger is the one where all the transaction get posted
         self.customer = {}
+        self.customer_list = []
+
 
         #Go back to the readme.
 
     def handleMessages(self):
+        self.CustDb()
         for message in self.consumer:
             message = message.value
             print('{} received'.format(message))
             self.customer[message['custid']] = message
             # add message to the transaction table in your SQL usinf SQLalchemy
-            with engine.connect() as connection:
-                connection.execute("insert into person (custid, createdate, fname, lname) values(%s, %s, %s, %s)", (message['custid'], message['createdate'], message['fname'], message['lname']))
+            if message['custid'] in self.customer_list:
+                print("Already a customer")
+            else:
+                with engine.connect() as connection:
+                    connection.execute("insert into person (custid, createdate, fname, lname) values(%s, %s, %s, %s)", (message['custid'], message['createdate'], message['fname'], message['lname']))
             print(self.customer)
+
+    def CustDb(self):
+        with engine.connect() as connection:
+            cust = connection.execute("select custid from person")
+            cust_list = cust.fetchall()
+            for row in range(len(cust_list)):
+                self.customer_list.append(row)
 
 class Transaction(Base):
     __tablename__ = 'person'
